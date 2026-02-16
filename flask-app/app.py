@@ -55,7 +55,19 @@ def index():
 @app.route('/favicon.ico')
 def favicon():
     """Return favicon to avoid 404 errors."""
-    return '', 204
+    from flask import send_from_directory
+    import os
+    
+    # Try to serve a favicon file if it exists, otherwise return a simple one
+    favicon_path = os.path.join(app.static_folder, 'favicon.ico')
+    if os.path.exists(favicon_path):
+        return send_from_directory(app.static_folder, 'favicon.ico')
+    else:
+        # Return a simple 1x1 pixel PNG as fallback
+        import base64
+        favicon_data = base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==')
+        from flask import Response
+        return Response(favicon_data, mimetype='image/x-icon')
 
 
 @app.route('/api/recipes', methods=['GET'])

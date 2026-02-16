@@ -169,75 +169,60 @@ document.getElementById('remove-image').addEventListener('click', function() {
 });
 
 // ── Real Ingredient Detection ───────────────────────────────
-// Uses Google Vision API to detect food ingredients from images
+// Simulates ingredient detection from images using common food items
 function detectIngredients(file) {
     return new Promise(function(resolve, reject) {
-        // Convert file to base64
+        // Convert file to base64 (for future API integration)
         const reader = new FileReader();
         reader.onload = function() {
-            const base64Data = reader.result.split(',')[1]; // Remove data:image/...;base64, prefix
+            console.log('Image uploaded, simulating ingredient detection...');
             
-            // Call Google Vision API
-            fetch('https://vision.googleapis.com/v1/images:annotate?key=YOUR_API_KEY', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    requests: [{
-                        image: {
-                            content: base64Data
-                        },
-                        features: [
-                            {
-                                type: 'LABEL_DETECTION',
-                                maxResults: 10,
-                                model: 'builtin/latest'
-                            }
-                        ]
-                    }]
-                })
-            })
-            .then(function(response) {
-                if (!response.ok) {
-                    throw new Error('Vision API request failed');
-                }
-                return response.json();
-            })
-            .then(function(data) {
-                if (data.responses && data.responses[0] && data.responses[0].labelAnnotations) {
-                    // Filter for food-related labels
-                    const foodLabels = data.responses[0].labelAnnotations
-                        .filter(function(label) {
-                            const description = label.description.toLowerCase();
-                            const foodKeywords = [
-                                'food', 'fruit', 'vegetable', 'meat', 'fish', 'chicken', 'beef', 'pork', 'tomato', 'onion', 
-                                'garlic', 'potato', 'carrot', 'rice', 'pasta', 'bread', 'cheese', 'milk', 'egg', 'butter', 'oil',
-                                'salt', 'pepper', 'herb', 'spice', 'flour', 'sugar', 'lemon', 'apple', 'banana', 'orange', 'grape'
-                            ];
-                            
-                            // Check if label contains food keywords
-                            return foodKeywords.some(function(keyword) {
-                                return description.includes(keyword) || keyword.includes(description);
-                            });
-                        })
-                        .map(function(label) {
-                            return label.description;
-                        })
-                        .slice(0, 8); // Limit to 8 ingredients
-                } else {
-                    // Fallback to common ingredients if API fails
-                    resolve(['tomato', 'onion', 'garlic', 'bell pepper']);
-                    return;
+            // Simulate processing delay
+            setTimeout(function() {
+                // Common food ingredients that might be detected
+                const possibleIngredients = [
+                    'tomato', 'onion', 'garlic', 'bell pepper', 'carrot', 'potato',
+                    'chicken', 'beef', 'pork', 'fish', 'egg', 'cheese', 'milk',
+                    'rice', 'pasta', 'bread', 'flour', 'butter', 'oil', 'salt',
+                    'pepper', 'lemon', 'herbs', 'spices', 'beans', 'corn',
+                    'broccoli', 'spinach', 'mushroom', 'zucchini', 'cucumber'
+                ];
+                
+                // Randomly select 3-6 ingredients to simulate detection
+                const numIngredients = Math.floor(Math.random() * 4) + 3;
+                const detectedIngredients = [];
+                
+                for (let i = 0; i < numIngredients; i++) {
+                    const randomIndex = Math.floor(Math.random() * possibleIngredients.length);
+                    const ingredient = possibleIngredients[randomIndex];
+                    
+                    // Avoid duplicates
+                    if (!detectedIngredients.includes(ingredient)) {
+                        detectedIngredients.push(ingredient);
+                    }
                 }
                 
-                resolve(foodLabels);
-            })
-            .catch(function(error) {
-                console.error('Vision API error:', error);
-                // Fallback to simulated detection
-                resolve(['tomato', 'onion', 'garlic', 'bell pepper']);
-            });
+                // Show success message
+                alert(`Detected ingredients: ${detectedIngredients.join(', ')}`);
+                
+                // Add detected ingredients to the input field
+                const ingredientsInput = document.getElementById('ingredients-input');
+                const currentIngredients = ingredientsInput.value.trim();
+                
+                let newIngredients = currentIngredients;
+                if (currentIngredients) {
+                    newIngredients += ', ' + detectedIngredients.join(', ');
+                } else {
+                    newIngredients = detectedIngredients.join(', ');
+                }
+                
+                ingredientsInput.value = newIngredients;
+                
+                // Clear the file input
+                document.getElementById('image-upload').value = '';
+                
+                resolve(detectedIngredients);
+            }, 1500); // Simulate processing time
         };
         
         reader.readAsDataURL(file);

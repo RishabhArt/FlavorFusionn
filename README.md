@@ -4,7 +4,7 @@ A Flask web application that matches user ingredients to recipes using an intell
 
 ## 🌐 Live Demo
 
-[🚀 Click here to try FlavorFusion]()
+[🚀 Click here to try FlavorFusion](https://flavorfusionn-1.onrender.com)
 
 
 ## Project Summary 

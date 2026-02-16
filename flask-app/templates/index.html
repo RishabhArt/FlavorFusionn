@@ -6,8 +6,31 @@
     <title>Smart Recipe Generator</title>
     <meta name="description" content="Find recipes based on ingredients you already have. Smart matching with dietary filters and nutritional info.">
     <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#f59e0b",
+                        background: "#ffffff",
+                        surface: "#f8fafc",
+                        text: "#1f2937",
+                        "text-light": "#6b7280",
+                        border: "#e5e7eb",
+                        "primary-light": "#f97316",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "full": "1rem"},
+                },
+            },
+        }
+    </script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -37,7 +60,10 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo-section">
-                    <div class="logo-icon">🍳 FlavorFusion</div>
+                    <div class="logo-icon">🍳</div>
+                    <div class="app-name">
+                        <h1 class="logo">FlavorFusion</h1>
+                    </div>
                 </div>
                 <div class="quick-search-section">
                     <div class="quick-search">
@@ -188,7 +214,21 @@
                         </div>
                     </div>
 
-                    <div id="browse-container" class="browse-grid">
+                    <div class="browse-controls">
+                        <div class="sort-filter-group">
+                            <select id="sort-select" class="bg-white border border-[#e5e7eb] px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
+                                <option value="name">Name</option>
+                                <option value="cook_time">Cook Time</option>
+                                <option value="difficulty">Difficulty</option>
+                                <option value="rating">Rating</option>
+                            </select>
+                        </div>
+                        <button id="browse-btn" class="bg-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-primary/90 transition-colors">
+                            Browse
+                        </button>
+                    </div>
+
+                    <div id="browse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Recipes will be loaded here when user clicks Browse -->
                 </div>
                     <div id="browse-loading" class="loading" style="display:none;">
@@ -209,13 +249,13 @@
 
         <!-- Favorites Section -->
         <section id="favorites-section" class="favorites-section">
-            <div class="container">
-                <div class="section-header">
-                    <h3 class="section-title">My Favorites</h3>
-                    <p class="section-subtitle">Your saved recipe collection</p>
+            <div class="max-w-7xl mx-auto px-6 lg:px-20 mb-20">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-2xl font-bold">My Favorites</h3>
+                    <p class="text-[#648273] text-sm">Your saved recipe collection</p>
                 </div>
-                <div class="favorites-grid" id="favorites-container">
-                    <p class="empty-state">No favorites saved yet. Search for recipes and save the ones you love!</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="favorites-container">
+                    <p class="empty-state col-span-full">No favorites saved yet. Search for recipes and save the ones you love!</p>
                 </div>
             </div>
         </section>
@@ -226,16 +266,15 @@
                 <div class="flex items-center justify-between mb-8">
                     <h3 class="text-2xl font-bold">Recommended for You</h3>
                     <div class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-[#ebefed] text-sm font-medium">
-                        <span class="text-[#648273]">Filter by rating:</span>
-                        <select id="recommended-filter" class="border-none focus:ring-0 text-sm font-bold p-0 cursor-pointer">
-                            <option value="4">4+ Stars</option>
-                            <option value="5">5 Stars Only</option>
+                        <span class="material-symbols-outlined text-[#f59e0b]" style="font-size: 16px;">star</span>
+                        <select id="recommended-filter" class="bg-transparent border-none focus:outline-none text-sm">
+                            <option value="4">4+ stars</option>
+                            <option value="5">5 stars only</option>
                         </select>
                     </div>
                 </div>
-
                 <div id="recommended-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Recommended recipes will be loaded here -->
+                    <p class="empty-state col-span-full">Loading recommended recipes...</p>
                 </div>
                 <div id="recommended-loading" class="loading" style="display:none;">
                     <div class="spinner"></div>

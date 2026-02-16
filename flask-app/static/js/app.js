@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('browse-btn').addEventListener('click', loadAllRecipes);
     
     // Add event listeners for dropdowns (only if they exist)
-    const sortSelect = document.getElementById('sort-select');
+    const sortSelect = document.getElementById('browse-sort-select');
     const browseFilter = document.getElementById('browse-filter');
     
     if (sortSelect) {
@@ -838,6 +838,29 @@ function hideQuickSearchResults() {
     }
 }
 
+// ── Perform Quick Search ───────────────────────────
+function performQuickSearch(query) {
+    // Search through all recipes
+    fetch('/api/recipes')
+        .then(response => response.json())
+        .then(recipes => {
+            // Filter recipes based on query
+            const filteredRecipes = recipes.filter(recipe => {
+                const searchTerms = query.toLowerCase().split(' ');
+                return searchTerms.every(term => 
+                    recipe.name.toLowerCase().includes(term) ||
+                    recipe.cuisine.toLowerCase().includes(term) ||
+                    recipe.ingredients.toLowerCase().includes(term)
+                );
+            });
+            
+            showQuickSearchResults(filteredRecipes, query);
+        })
+        .catch(error => {
+            console.error('Error performing quick search:', error);
+        });
+}
+
 // ── Show Quick Search Results ───────────────────────────
 function showQuickSearchResults(recipes, searchTerm) {
     // Remove existing quick search results
@@ -872,7 +895,7 @@ function showQuickSearchResults(recipes, searchTerm) {
 function showSavedRecipes() {
     const resultsContainer = document.getElementById('results-container');
     const searchSection = document.querySelector('.search-section');
-    const sortBy = document.getElementById('sort-select').value;
+    const sortBy = document.getElementById('browse-sort-select').value;
     const cuisineFilter = document.getElementById('browse-filter').value;
     
     // Show loading state
@@ -927,7 +950,7 @@ function showSavedRecipes() {
 // Loads and displays all recipes with sorting and filtering
 // Make function globally available
 window.loadAllRecipes = function() {
-    const sortBy = document.getElementById('sort-select').value;
+    const sortBy = document.getElementById('browse-sort-select').value;
     const cuisineFilter = document.getElementById('browse-filter').value;
     
     console.log('Loading recipes with sort:', sortBy, 'filter:', cuisineFilter);

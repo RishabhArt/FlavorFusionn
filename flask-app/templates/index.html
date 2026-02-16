@@ -60,7 +60,10 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo-section">
-                    <div class="logo-icon"><img src="/static/images/logo.png" alt="FlavorFusion Logo"></div>
+                    <div class="logo-icon">
+                        <img src="/static/images/logo.png" alt="FlavorFusion Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div style="display:none; width:100%; height:100%; background:#f59e0b; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; font-size:2rem;">🍳</div>
+                    </div>
                     <div class="app-name">
                         <h1 class="logo">FlavorFusion</h1>
                     </div>
@@ -184,7 +187,7 @@
                         <h3 class="text-2xl font-bold">Browse All Recipes</h3>
                         <div class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-[#ebefed] text-sm font-medium">
                             <span class="text-[#648273]">Sort by:</span>
-                            <select id="sort-select" class="border-none focus:ring-0 text-sm font-bold p-0 cursor-pointer">
+                            <select id="browse-sort-select" class="border-none focus:ring-0 text-sm font-bold p-0 cursor-pointer">
                                 <option value="name">Name</option>
                                 <option value="cook_time">Cook Time</option>
                                 <option value="difficulty">Difficulty</option>

@@ -6,14 +6,21 @@ using a scoring algorithm. Built with SQLite for storage
 and vanilla JS for the frontend.
 """
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 import sqlite3
 import json
 import os
 
 # ── App Setup ──────────────────────────────────────────────
-app = Flask(__name__)
-DATABASE = os.path.join(os.path.dirname(__file__), 'recipes.db')
+app = Flask(__name__, static_folder='static', static_url_path='/static')
+
+# Production configuration
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+app.config['DEBUG'] = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
+
+# Database configuration - use absolute path for production
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+DATABASE = os.path.join(BASE_DIR, 'recipes.db')
 
 # ── Database Initialization ────────────────────────────────
 def init_db():
@@ -348,8 +355,8 @@ def get_substitutions(recipe_id):
 # ── Error Handlers ─────────────────────────────────────────
 @app.errorhandler(404)
 def not_found(e):
-    """Handle 404 errors with a JSON response."""
-    return jsonify({'error': 'Resource not found'}), 404
+    """Handle 404 errors - serve main app for client-side routing."""
+    return render_template('index.html')
 
 
 @app.errorhandler(500)
@@ -358,8 +365,26 @@ def server_error(e):
     return jsonify({'error': 'Something went wrong on our end. Please try again.'}), 500
 
 
+# ── Catch-all Route for Client-Side Routing ───────────────
+@app.route('/<path:path>')
+def catch_all(path):
+    """Serve static files or main app for client-side routing."""
+    # Try to serve as static file first
+    if '.' in path:
+        try:
+            return send_from_directory(app.static_folder, path)
+        except:
+            pass
+    # Fall back to main app
+    return render_template('index.html')
+
+
 # ── Entry Point ────────────────────────────────────────────
 if __name__ == '__main__':
     # Initialize database before starting the app
     init_db()
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=False)
+    # Use environment variables for production
+    host = os.environ.get('HOST', '0.0.0.0')
+    port = int(os.environ.get('PORT', 5000))
+    debug = app.config['DEBUG']
+    app.run(host=host, port=port, debug=debug)

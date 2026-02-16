@@ -29,8 +29,8 @@ def init_db():
         # Check if database exists and has the recipes table
         if not os.path.exists(DATABASE):
             print("Database not found. Creating new database...")
-            from database import create_database
-            create_database()
+            from database import initialize_database
+            initialize_database()
         else:
             # Check if database has the recipes table
             test_db = sqlite3.connect(DATABASE)
@@ -41,8 +41,8 @@ def init_db():
             
             if not table_exists:
                 print("Database exists but no recipes table found. Recreating database...")
-                from database import create_database
-                create_database()
+                from database import initialize_database
+                initialize_database()
             else:
                 # Check if table has data
                 db = get_db()
@@ -51,8 +51,8 @@ def init_db():
                 
                 if count == 0:
                     print("Database table exists but is empty. Seeding data...")
-                    from database import seed_recipes
-                    seed_recipes()
+                    from database import initialize_database
+                    initialize_database()
                 else:
                     print(f"Database found with {count} recipes at: {DATABASE}")
                     
@@ -60,8 +60,8 @@ def init_db():
         print(f"Error initializing database: {str(e)}")
         # Try to create database anyway
         try:
-            from database import create_database
-            create_database()
+            from database import initialize_database
+            initialize_database()
         except Exception as e2:
             print(f"Failed to create database: {str(e2)}")
 

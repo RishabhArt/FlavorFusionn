@@ -37,10 +37,7 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo-section">
-                    <div class="logo-icon">🍳</div>
-                    <div class="app-name">
-                        <h1 class="logo">FlavorFusion</h1>
-                    </div>
+                    <div class="logo-icon">🍳 FlavorFusion</div>
                 </div>
                 <div class="quick-search-section">
                     <div class="quick-search">
@@ -189,12 +186,9 @@
                                 <option value="Chinese">Chinese</option>
                             </select>
                         </div>
-                        <button id="browse-btn" class="bg-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-primary/90 transition-colors">
-                            Browse
-                        </button>
                     </div>
 
-                    <div id="browse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div id="browse-container" class="browse-grid">
                     <!-- Recipes will be loaded here when user clicks Browse -->
                 </div>
                     <div id="browse-loading" class="loading" style="display:none;">
@@ -215,13 +209,13 @@
 
         <!-- Favorites Section -->
         <section id="favorites-section" class="favorites-section">
-            <div class="max-w-7xl mx-auto px-6 lg:px-20 mb-20">
-                <div class="flex items-center justify-between mb-8">
-                    <h3 class="text-2xl font-bold">My Favorites</h3>
-                    <p class="text-[#648273] text-sm">Your saved recipe collection</p>
+            <div class="container">
+                <div class="section-header">
+                    <h3 class="section-title">My Favorites</h3>
+                    <p class="section-subtitle">Your saved recipe collection</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="favorites-container">
-                    <p class="empty-state col-span-full">No favorites saved yet. Search for recipes and save the ones you love!</p>
+                <div class="favorites-grid" id="favorites-container">
+                    <p class="empty-state">No favorites saved yet. Search for recipes and save the ones you love!</p>
                 </div>
             </div>
         </section>

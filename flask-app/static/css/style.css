@@ -1160,6 +1160,12 @@ body {
     z-index: 1000;
 }
 
+.logo-icon {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
 .modal-content {
     background: #ffffff;
     border-radius: var(--radius);
@@ -1417,5 +1423,101 @@ body {
     .modal-content {
         margin: 20px;
         max-height: 90vh;
+    }
+}
+
+/* ── Layout Classes ─────────────────────────────────── */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+}
+
+.section-subtitle {
+    color: var(--color-text-light);
+    font-size: 0.875rem;
+}
+
+.favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+@media (max-width: 768px) {
+    .favorites-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .favorites-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.browse-controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    align-items: center;
+}
+
+.sort-filter-group {
+    display: flex;
+    gap: 8px;
+}
+
+.sort-select {
+    background: white;
+    border: 1px solid var(--color-border);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+}
+
+.browse-button {
+    background: var(--color-primary);
+    color: white;
+    font-weight: 700;
+    padding: 8px 24px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.browse-button:hover {
+    background: var(--color-primary-dark);
+}
+
+.browse-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+@media (max-width: 768px) {
+    .browse-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .browse-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

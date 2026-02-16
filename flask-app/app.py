@@ -24,14 +24,38 @@ DATABASE = os.path.join(BASE_DIR, 'recipes.db')
 
 # ── Database Initialization ────────────────────────────────
 def init_db():
-    """Initialize database if it doesn't exist."""
+    """Initialize database if it doesn't exist or is empty."""
     try:
+        # Check if database exists and has the recipes table
         if not os.path.exists(DATABASE):
             print("Database not found. Creating new database...")
             from database import create_database
             create_database()
         else:
-            print(f"Database found at: {DATABASE}")
+            # Check if database has the recipes table
+            test_db = sqlite3.connect(DATABASE)
+            cursor = test_db.cursor()
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='recipes'")
+            table_exists = cursor.fetchone() is not None
+            test_db.close()
+            
+            if not table_exists:
+                print("Database exists but no recipes table found. Recreating database...")
+                from database import create_database
+                create_database()
+            else:
+                # Check if table has data
+                db = get_db()
+                count = db.execute('SELECT COUNT(*) FROM recipes').fetchone()[0]
+                db.close()
+                
+                if count == 0:
+                    print("Database table exists but is empty. Seeding data...")
+                    from database import seed_recipes
+                    seed_recipes()
+                else:
+                    print(f"Database found with {count} recipes at: {DATABASE}")
+                    
     except Exception as e:
         print(f"Error initializing database: {str(e)}")
         # Try to create database anyway
@@ -84,6 +108,9 @@ def get_all_recipes():
     Used to populate the browse section.
     """
     try:
+        # Ensure database is initialized
+        init_db()
+        
         db = get_db()
         recipes = db.execute('SELECT * FROM recipes').fetchall()
         db.close()
@@ -152,6 +179,9 @@ def search_recipes():
     4. Sort by score descending, return top 3-5 matches
     """
     try:
+        # Ensure database is initialized
+        init_db()
+        
         data = request.get_json()
         
         if not data:
